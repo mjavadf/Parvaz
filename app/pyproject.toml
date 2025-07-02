@@ -1,0 +1,7 @@
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+exclude = ["migrations", "__pycache__"]
+
+[tool.ruff.lint]
+extend-select = ["E", "F", "W", "B", "I", "UP"]
