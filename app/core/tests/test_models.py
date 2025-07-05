@@ -54,7 +54,7 @@ class ModelTests(TestCase):
         """Test that creating a user with no password is not usable"""
         username = "test_user_no_pass"
         user = get_user_model().objects.create_user(
-            username=username, password=None, email='test@example.com'
+            username=username, password=None, email="test@example.com"
         )
 
         self.assertFalse(user.has_usable_password())
