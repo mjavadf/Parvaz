@@ -49,6 +49,12 @@ up:
 down:
     docker-compose down
 
+# Rebuild the Docker image and restart the application
+rebuild:
+    docker-compose down
+    docker-compose build
+    docker-compose up -d 
+
 # Show the logs for the app container
 logs *args:
     docker-compose logs {{args}}

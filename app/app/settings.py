@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 import os
+from datetime import timedelta
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
     # Third-Parties
     "rest_framework",
     "drf_spectacular",
+    "djoser",
     # Local Apps
     "core",
 ]
@@ -131,6 +133,21 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "core.user"
+
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
 }
+
+if DEBUG:
+    SIMPLE_JWT = {
+        "AUTH_HEADER_TYPES": ("JWT",),
+        "ACCESS_TOKEN_LIFETIME": timedelta(days=7),
+        "REFRESH_TOKEN_LIFETIME": timedelta(days=14),
+    }
+else:
+    SIMPLE_JWT = {
+        "AUTH_HEADER_TYPES": ("JWT",),
+    }

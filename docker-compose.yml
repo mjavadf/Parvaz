@@ -4,6 +4,7 @@ services:
       context: .
       args:
         - DEV=true
+    restart: always
     ports:
       - "8000:8000"
     volumes:
