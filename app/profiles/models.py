@@ -35,7 +35,9 @@ class TherapistProfile(models.Model):
     # TODO: add country field
     licence_number = models.CharField(max_length=32, unique=True)
     specializations = models.ManyToManyField(
-        Specialization, related_name="therapist_profiles", verbose_name="Specializations"
+        Specialization,
+        related_name="therapist_profiles",
+        verbose_name="Specializations",
     )
     languages = models.ManyToManyField(
         Language, related_name="therapist_profiles", verbose_name="Languages"
