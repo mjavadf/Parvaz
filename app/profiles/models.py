@@ -18,7 +18,7 @@ class Language(models.Model):
     """
 
     name = models.CharField(max_length=256)
-    iso = models.CharField(max_length=3)
+    iso = models.CharField(max_length=7)
 
     def __str__(self):
         return self.name
