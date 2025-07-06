@@ -1,5 +1,5 @@
-from django.db import models
 from django.conf import settings
+from django.db import models
 
 
 class Specialization(models.Model):
@@ -7,7 +7,7 @@ class Specialization(models.Model):
 
     name = models.CharField(max_length=256)
     description = models.TextField()
-    
+
     def __str__(self):
         return self.name
 
@@ -62,6 +62,6 @@ class ClientProfile(models.Model):
     )
     phone_number = models.CharField(max_length=32, blank=True)
     # TODO: add timezone field https://pypi.org/project/django-timezone-field/
-    
+
     def __str__(self):
         return f"{self.user.username}"
