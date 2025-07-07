@@ -37,7 +37,9 @@ class TherapistProfileModelTests(TestCase):
         profile = TherapistProfile.objects.create(
             user=self.user, licence_number="12345"
         )
-        self.assertEqual(str(profile), f"{self.user.username} - {profile.licence_number}")
+        self.assertEqual(
+            str(profile), f"{self.user.username} - {profile.licence_number}"
+        )
 
     def test_therapist_profile_with_specializations_and_languages(self):
         """Test creating a therapist profile with specializations and languages"""

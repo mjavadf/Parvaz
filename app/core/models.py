@@ -1,19 +1,32 @@
-# TODO: Fix d-compose and checks: https://www.notion.so/javaat/Database-20c3e76aeaaf80ef9b2ffa3c58bbf0a2?source=copy_link#20d3e76aeaaf80a6b830f0e630898aa4
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
+
+PROFILE_TYPES = (
+    ("client", "Client"),
+    ("therapist", "Therapist"),
+    ("superuser", "Superuser"),
+)
 
 
 class UserManager(BaseUserManager):
     """Manager for users."""
 
-    def create_user(self, username, email, password=None, **extra_fields):
+    def create_user(
+        self, username, email, profile_type="client", password=None, **extra_fields
+    ):
         """Create, save and return a new user."""
         if not username:
             raise ValueError("User must have a username.")
         if not email:
             raise ValueError("User must have an email address.")
+        if profile_type not in [type for type, _ in PROFILE_TYPES]:
+            raise ValueError("Invalid profile type.")
+
         user = self.model(
-            username=username, email=self.normalize_email(email), **extra_fields
+            username=username,
+            email=self.normalize_email(email),
+            profile_type=profile_type,
+            **extra_fields,
         )
         user.set_password(password)
         user.save(using=self._db)
@@ -22,7 +35,7 @@ class UserManager(BaseUserManager):
 
     def create_superuser(self, username, email, password):
         """Create and return a new superuser."""
-        user = self.create_user(username, email, password)
+        user = self.create_user(username, email, "superuser", password)
 
         user.is_staff = True
         user.is_superuser = True
@@ -32,7 +45,14 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractUser):
+    """User Model"""
+
     email = models.EmailField(unique=True, blank=False)
+
+    profile_type = models.CharField(
+        max_length=10, choices=PROFILE_TYPES, default="client"
+    )
+
     REQUIRED_FIELDS = ["email"]
 
     objects = UserManager()  # type: ignore
