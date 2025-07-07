@@ -21,3 +21,8 @@ class TherapistProfileAdmin(admin.ModelAdmin):
 @admin.register(models.ClientProfile)
 class ClientProfileAdmin(admin.ModelAdmin):
     pass
+
+
+@admin.register(models.SuperuserProfile)
+class SuperuserProfileAdmin(admin.ModelAdmin):
+    pass
