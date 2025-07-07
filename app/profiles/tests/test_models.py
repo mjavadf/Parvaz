@@ -3,7 +3,13 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
-from profiles.models import ClientProfile, Language, Specialization, TherapistProfile
+from profiles.models import (
+    ClientProfile,
+    Language,
+    Specialization,
+    TherapistProfile,
+    SuperuserProfile,
+)
 
 
 class SpecializationModelTests(TestCase):
@@ -30,7 +36,12 @@ class TherapistProfileModelTests(TestCase):
     """Tests for the TherapistProfile model"""
 
     def setUp(self):
-        self.user = get_user_model().objects.create_user("therapist", "password123")
+        self.user = get_user_model().objects.create_user(
+            username="therapist",
+            password="password123",
+            email="therapist@example.com",
+            profile_type="therapist",
+        )
 
     def test_create_therapist_profile(self):
         """Test creating a therapist profile is successful"""
@@ -62,7 +73,12 @@ class ClientProfileModelTests(TestCase):
     """Tests for the ClientProfile model"""
 
     def setUp(self):
-        self.user = get_user_model().objects.create_user("client", "password123")
+        self.user = get_user_model().objects.create_user(
+            username="client",
+            password="password123",
+            email="client@example.com",
+            profile_type="client",
+        )
 
     def test_create_client_profile(self):
         """Test creating a client profile is successful"""
@@ -78,3 +94,16 @@ class ClientProfileModelTests(TestCase):
         profile.languages.add(language1, language2)
 
         self.assertEqual(profile.languages.count(), 2)
+
+
+class SuperuserProfileModelTests(TestCase):
+    """Tests for the SuperuserProfile model"""
+
+    def setUp(self):
+        self.user = get_user_model().objects.create_superuser(
+            username="superuser", password="password123", email="superuser@example.com"
+        )
+
+    def test_create_superuser_profile(self):
+        profile = SuperuserProfile.objects.create(user=self.user)
+        self.assertEqual(str(profile), self.user.username)

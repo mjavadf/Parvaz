@@ -67,3 +67,15 @@ class ClientProfile(models.Model):
 
     def __str__(self):
         return f"{self.user.username}"
+
+class SuperuserProfile(models.Model):
+    """Model for superuser profiles"""
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="superuser_profile",
+    )
+    phone_number = models.CharField(max_length=32, blank=True)
+    
+    def __str__(self):
+        return f"{self.user.username}"
