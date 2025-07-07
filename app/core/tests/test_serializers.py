@@ -18,8 +18,8 @@ class UserCreationSerializerTests(APITestCase):
         payload = {
             "username": "testclient",
             "email": "client@example.com",
-            "password": "password123",
-            "re_password": "password123",
+            "password": "aComplexPassword123!",
+            "re_password": "aComplexPassword123!",
             "profile_type": "client",
         }
         response = self.client.post(self.create_user_url, payload, format="json")
@@ -27,17 +27,23 @@ class UserCreationSerializerTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(self.User.objects.count(), 1)
         self.assertTrue(self.User.objects.filter(username="testclient").exists())
-        self.assertTrue(ClientProfile.objects.filter(user__username="testclient").exists())
-        self.assertFalse(TherapistProfile.objects.filter(user__username="testclient").exists())
-        self.assertFalse(SuperuserProfile.objects.filter(user__username="testclient").exists())
+        self.assertTrue(
+            ClientProfile.objects.filter(user__username="testclient").exists()
+        )
+        self.assertFalse(
+            TherapistProfile.objects.filter(user__username="testclient").exists()
+        )
+        self.assertFalse(
+            SuperuserProfile.objects.filter(user__username="testclient").exists()
+        )
 
     def test_create_therapist_user_with_valid_data(self):
         """Test creating a therapist user with valid data"""
         payload = {
             "username": "testtherapist",
             "email": "therapist@example.com",
-            "password": "password123",
-            "re_password": "password123",
+            "password": "aComplexPassword123!",
+            "re_password": "aComplexPassword123!",
             "profile_type": "therapist",
         }
         response = self.client.post(self.create_user_url, payload, format="json")
@@ -45,9 +51,15 @@ class UserCreationSerializerTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(self.User.objects.count(), 1)
         self.assertTrue(self.User.objects.filter(username="testtherapist").exists())
-        self.assertTrue(TherapistProfile.objects.filter(user__username="testtherapist").exists())
-        self.assertFalse(ClientProfile.objects.filter(user__username="testtherapist").exists())
-        self.assertFalse(SuperuserProfile.objects.filter(user__username="testtherapist").exists())
+        self.assertTrue(
+            TherapistProfile.objects.filter(user__username="testtherapist").exists()
+        )
+        self.assertFalse(
+            ClientProfile.objects.filter(user__username="testtherapist").exists()
+        )
+        self.assertFalse(
+            SuperuserProfile.objects.filter(user__username="testtherapist").exists()
+        )
 
     def test_create_user_with_invalid_profile_type(self):
         """Test creating a user with an invalid profile type"""
@@ -69,8 +81,8 @@ class UserCreationSerializerTests(APITestCase):
         payload = {
             "username": "nouser",
             "email": "no@example.com",
-            "password": "password123",
-            "re_password": "password123",
+            "password": "aComplexPassword123!",
+            "re_password": "aComplexPassword123!",
         }
         response = self.client.post(self.create_user_url, payload, format="json")
 
@@ -78,9 +90,12 @@ class UserCreationSerializerTests(APITestCase):
         self.assertEqual(self.User.objects.count(), 1)
         self.assertTrue(self.User.objects.filter(username="nouser").exists())
         self.assertTrue(ClientProfile.objects.filter(user__username="nouser").exists())
-        self.assertFalse(TherapistProfile.objects.filter(user__username="nouser").exists())
-        self.assertFalse(SuperuserProfile.objects.filter(user__username="nouser").exists())
-        
+        self.assertFalse(
+            TherapistProfile.objects.filter(user__username="nouser").exists()
+        )
+        self.assertFalse(
+            SuperuserProfile.objects.filter(user__username="nouser").exists()
+        )
 
     def test_create_superuser_via_api_is_not_allowed(self):
         """Test that superuser cannot be created via API"""
@@ -96,3 +111,48 @@ class UserCreationSerializerTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(self.User.objects.count(), 0)
         self.assertIn("profile_type", response.data)
+
+    def test_password_too_short(self):
+        """
+        Test that a validation error is raised for a password that is too short.
+        """
+        payload = {
+            "username": "testuser",
+            "email": "test@example.com",
+            "password": "pw",
+            "re_password": "pw",
+            "profile_type": "client",
+        }
+        response = self.client.post(self.create_user_url, payload, format="json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("password", response.data)
+
+    def test_password_too_common(self):
+        """
+        Test that a validation error is raised for a password that is too common.
+        """
+        payload = {
+            "username": "testuser",
+            "email": "test@example.com",
+            "password": "password",
+            "re_password": "password",
+            "profile_type": "client",
+        }
+        response = self.client.post(self.create_user_url, payload, format="json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("password", response.data)
+
+    def test_password_entirely_numeric(self):
+        """
+        Test that a validation error is raised for a password that is entirely numeric.
+        """
+        payload = {
+            "username": "testuser",
+            "email": "test@example.com",
+            "password": "123456789",
+            "re_password": "123456789",
+            "profile_type": "client",
+        }
+        response = self.client.post(self.create_user_url, payload, format="json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("password", response.data)
