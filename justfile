@@ -22,8 +22,8 @@ format-check:
     docker-compose run --rm app sh -c "ruff format  --check"
 
 # Run tests
-test:
-    docker-compose run --rm app sh -c "python manage.py test"
+test *args:
+    docker-compose run --rm app sh -c "python manage.py test {{args}}"
 
 # Make migrations for a specific app
 makemigrations app="":
