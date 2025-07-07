@@ -45,9 +45,9 @@ class TherapistProfileModelTests(TestCase):
 
     def test_create_therapist_profile(self):
         """Test creating a therapist profile is successful"""
-        profile = TherapistProfile.objects.create(
-            user=self.user, licence_number="12345"
-        )
+        profile = TherapistProfile.objects.get(user=self.user)
+        profile.licence_number = "12345"
+        profile.save()
         self.assertEqual(
             str(profile), f"{self.user.username} - {profile.licence_number}"
         )
@@ -59,9 +59,9 @@ class TherapistProfileModelTests(TestCase):
         language1 = Language.objects.create(name="English", iso="en")
         language2 = Language.objects.create(name="Persian", iso="fa")
 
-        profile = TherapistProfile.objects.create(
-            user=self.user, licence_number="12345"
-        )
+        profile = TherapistProfile.objects.get(user=self.user)
+        profile.licence_number = "12345"
+        profile.save()
         profile.specializations.add(specialization1, specialization2)
         profile.languages.add(language1, language2)
 
@@ -82,7 +82,7 @@ class ClientProfileModelTests(TestCase):
 
     def test_create_client_profile(self):
         """Test creating a client profile is successful"""
-        profile = ClientProfile.objects.create(user=self.user)
+        profile = ClientProfile.objects.get(user=self.user)
         self.assertEqual(str(profile), self.user.username)
 
     def test_client_profile_with_languages(self):
@@ -90,7 +90,7 @@ class ClientProfileModelTests(TestCase):
         language1 = Language.objects.create(name="English", iso="en")
         language2 = Language.objects.create(name="Persian", iso="fa")
 
-        profile = ClientProfile.objects.create(user=self.user)
+        profile = ClientProfile.objects.get(user=self.user)
         profile.languages.add(language1, language2)
 
         self.assertEqual(profile.languages.count(), 2)
@@ -105,5 +105,5 @@ class SuperuserProfileModelTests(TestCase):
         )
 
     def test_create_superuser_profile(self):
-        profile = SuperuserProfile.objects.create(user=self.user)
+        profile = SuperuserProfile.objects.get(user=self.user)
         self.assertEqual(str(profile), self.user.username)
