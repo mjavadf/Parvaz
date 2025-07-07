@@ -1,9 +1,8 @@
-from djoser.serializers import UserSerializer as DjoserUserSerializer
-from rest_framework import serializers
-from . import models
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+from djoser.serializers import UserSerializer as DjoserUserSerializer
+from rest_framework import serializers
 
 
 class UserCreateSerializer(DjoserUserSerializer):
@@ -37,8 +36,7 @@ class UserCreateSerializer(DjoserUserSerializer):
         try:
             validate_password(password, user)
         except ValidationError as e:
-            raise serializers.ValidationError({"password": list(e.messages)})
+            raise serializers.ValidationError({"password": list(e.messages)}) from e
 
         return super().validate(attrs)
 
-    
