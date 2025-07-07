@@ -2,7 +2,8 @@
 
 from django.contrib.auth import get_user_model
 from django.test import TestCase
-from profiles.models import ClientProfile, TherapistProfile, SuperuserProfile
+
+from profiles.models import ClientProfile, SuperuserProfile, TherapistProfile
 
 
 class SignalTests(TestCase):

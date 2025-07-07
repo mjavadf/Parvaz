@@ -7,8 +7,8 @@ from profiles.models import (
     ClientProfile,
     Language,
     Specialization,
-    TherapistProfile,
     SuperuserProfile,
+    TherapistProfile,
 )
 
 

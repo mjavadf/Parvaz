@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.translation import gettext_lazy as _
+
 from core import models
 
 
@@ -9,9 +10,10 @@ class UserAdmin(BaseUserAdmin):
     """
     Define the admin pages for the user model.
     """
+
     ordering = ["id"]
     list_display = ["username", "email", "profile_type", "is_staff", "is_superuser"]
-    
+
     add_fieldsets = (
         (
             None,
@@ -30,9 +32,18 @@ class UserAdmin(BaseUserAdmin):
             },
         ),
     )
-    
+
     fieldsets = (
-        (None, {"fields": ("username", "password", "profile_type",)}),
+        (
+            None,
+            {
+                "fields": (
+                    "username",
+                    "password",
+                    "profile_type",
+                )
+            },
+        ),
         (_("Personal info"), {"fields": ("first_name", "last_name", "email")}),
         (
             _("Permissions"),
@@ -48,6 +59,3 @@ class UserAdmin(BaseUserAdmin):
         ),
         (_("Important dates"), {"fields": ("last_login", "date_joined")}),
     )
-    
-    
-    
