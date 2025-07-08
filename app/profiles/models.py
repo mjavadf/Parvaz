@@ -40,7 +40,10 @@ class TherapistProfile(models.Model):
         verbose_name="Specializations",
     )
     languages = models.ManyToManyField(
-        Language, related_name="therapist_profiles", verbose_name="Languages", blank=True
+        Language,
+        related_name="therapist_profiles",
+        verbose_name="Languages",
+        blank=True,
     )
     bio = models.TextField(blank=True)
     # TODO: add profile photo
