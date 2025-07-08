@@ -6,7 +6,7 @@ class Specialization(models.Model):
     """Model for specializations"""
 
     name = models.CharField(max_length=256)
-    description = models.TextField()
+    description = models.TextField(blank=True)
 
     def __str__(self):
         return self.name
@@ -33,14 +33,14 @@ class TherapistProfile(models.Model):
         related_name="therapist_profile",
     )
     # TODO: add country field
-    licence_number = models.CharField(max_length=32, unique=True)
+    licence_number = models.CharField(max_length=32, unique=True, blank=True)
     specializations = models.ManyToManyField(
         Specialization,
         related_name="therapist_profiles",
         verbose_name="Specializations",
     )
     languages = models.ManyToManyField(
-        Language, related_name="therapist_profiles", verbose_name="Languages"
+        Language, related_name="therapist_profiles", verbose_name="Languages", blank=True
     )
     bio = models.TextField(blank=True)
     # TODO: add profile photo
@@ -60,7 +60,7 @@ class ClientProfile(models.Model):
     # TODO: add country of origin field
     # TODO: add country of residence field
     languages = models.ManyToManyField(
-        Language, related_name="+", verbose_name="Languages"
+        Language, related_name="+", verbose_name="Languages", blank=True
     )
     phone_number = models.CharField(max_length=32, blank=True)
     # TODO: add timezone field https://pypi.org/project/django-timezone-field/
