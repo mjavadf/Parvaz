@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django_countries.fields import CountryField
 
 
 class Specialization(models.Model):
@@ -32,7 +33,7 @@ class TherapistProfile(models.Model):
         on_delete=models.CASCADE,
         related_name="therapist_profile",
     )
-    # TODO: add country field
+    country = CountryField(blank=True)
     licence_number = models.CharField(max_length=32, unique=True, blank=True)
     specializations = models.ManyToManyField(
         Specialization,
@@ -60,8 +61,8 @@ class ClientProfile(models.Model):
         on_delete=models.CASCADE,
         related_name="client_profile",
     )
-    # TODO: add country of origin field
-    # TODO: add country of residence field
+    country_of_origin = CountryField(blank=True)
+    country_of_residence = CountryField(blank=True)
     languages = models.ManyToManyField(
         Language, related_name="+", verbose_name="Languages", blank=True
     )
