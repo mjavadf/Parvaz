@@ -47,10 +47,14 @@ class TherapistProfileModelTests(TestCase):
         """Test creating a therapist profile is successful"""
         profile = TherapistProfile.objects.get(user=self.user)
         profile.licence_number = "12345"
+        profile.country = "CA"
+        profile.bio = "This is a bio."
         profile.save()
         self.assertEqual(
             str(profile), f"{self.user.username} - {profile.licence_number}"
         )
+        self.assertEqual(profile.country, "CA")
+        self.assertEqual(profile.bio, "This is a bio.")
 
     def test_therapist_profile_with_specializations_and_languages(self):
         """Test creating a therapist profile with specializations and languages"""
@@ -83,7 +87,14 @@ class ClientProfileModelTests(TestCase):
     def test_create_client_profile(self):
         """Test creating a client profile is successful"""
         profile = ClientProfile.objects.get(user=self.user)
+        profile.country_of_origin = "IR"
+        profile.country_of_residence = "CA"
+        profile.phone_number = "1234567890"
+        profile.save()
         self.assertEqual(str(profile), self.user.username)
+        self.assertEqual(profile.country_of_origin, "IR")
+        self.assertEqual(profile.country_of_residence, "CA")
+        self.assertEqual(profile.phone_number, "1234567890")
 
     def test_client_profile_with_languages(self):
         """Test creating a client profile with languages"""
@@ -105,5 +116,9 @@ class SuperuserProfileModelTests(TestCase):
         )
 
     def test_create_superuser_profile(self):
+        """Test creating a superuser profile is successful"""
         profile = SuperuserProfile.objects.get(user=self.user)
+        profile.phone_number = "0987654321"
+        profile.save()
         self.assertEqual(str(profile), self.user.username)
+        self.assertEqual(profile.phone_number, "0987654321")
